@@ -1,0 +1,11 @@
+Standard IP access list 1
+    10 permit 10.10.99.0, wildcard bits 0.0.0.255 (12 matches)
+Standard IP access list 2
+    10 permit 10.10.10.0, wildcard bits 0.0.0.255 (45 matches)
+    20 permit 10.10.20.0, wildcard bits 0.0.0.255 (13 matches)
+    30 permit 10.10.30.0, wildcard bits 0.0.0.255 (8 matches)
+    40 permit 10.10.99.0, wildcard bits 0.0.0.255 (2 matches)
+Extended IP access list 100
+    10 deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255 (4 matches)
+    20 deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255 (1 match)
+    30 permit ip any any (41 matches)

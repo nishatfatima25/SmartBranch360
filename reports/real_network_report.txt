@@ -1,0 +1,35 @@
+SMARTBRANCH 360
+NETWORK ASSURANCE REPORT
+
+Overall Status: PASSED
+
+CRITICAL: 0
+HIGH: 0
+MEDIUM: 0
+LOW: 0
+
+--------------------------------
+
+[PASS] VLAN - VLAN 10 (Employee) exists.
+[PASS] VLAN - VLAN 20 (Guest) exists.
+[PASS] VLAN - VLAN 30 (Server) exists.
+[PASS] VLAN - VLAN 99 (Management) exists.
+[PASS] VLAN - VLAN 10 (Employee) exists.
+[PASS] VLAN - VLAN 20 (Guest) exists.
+[PASS] VLAN - VLAN 30 (Server) exists.
+[PASS] VLAN - VLAN 99 (Management) exists.
+[PASS] TRUNK - Trunk GigabitEthernet0/1 allows required VLANs.
+[PASS] TRUNK - Trunk GigabitEthernet0/2 allows required VLANs.
+[PASS] TRUNK - Trunk GigabitEthernet0/1 allows required VLANs.
+[PASS] ROUTING - Interface GigabitEthernet0/0.10 IP is 10.10.10.1.
+[PASS] ROUTING - Interface GigabitEthernet0/0.20 IP is 10.10.20.1.
+[PASS] ROUTING - Interface GigabitEthernet0/0.30 IP is 10.10.30.1.
+[PASS] ROUTING - Interface GigabitEthernet0/0.99 IP is 10.10.99.1.
+[PASS] SECURITY - Guest to Server traffic is denied.
+[PASS] SECURITY - Guest to Management traffic is denied.
+
+================================
+SUMMARY
+17 checks passed
+0 checks failed
+0 insufficient evidence

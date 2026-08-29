@@ -1,0 +1,53 @@
+! SWITCH 2 (SW2) CONFIGURATION
+! Copy and paste this into the SW2 CLI (Global Configuration Mode)
+
+hostname SW2
+no ip domain-lookup
+ip domain-name smartbranch.local
+crypto key generate rsa modulus 2048
+
+username admin privilege 15 secret cisco123
+
+line vty 0 4
+ login local
+ transport input ssh
+exit
+
+! Create VLANs
+vlan 10
+ name Employee
+vlan 20
+ name Guest
+vlan 30
+ name Server
+vlan 99
+ name Management
+exit
+
+! Management Interface
+interface vlan 99
+ ip address 10.10.99.12 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 10.10.99.1
+
+! Trunk to SW1
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+exit
+
+! Employee PC Port
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+exit
+
+! AP Connection (Guest)
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+exit

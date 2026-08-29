@@ -1,0 +1,14 @@
+R1#show access-lists
+Standard IP access list 1
+    10 permit 10.10.99.0 0.0.0.255 (2 match(es))
+Extended IP access list 100
+    10 deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255 (20 match(es))
+    20 deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255 (28 match(es))
+    30 permit ip any any (24 match(es))
+Standard IP access list 2
+    10 permit 10.10.10.0 0.0.0.255 (24 match(es))
+    20 permit 10.10.20.0 0.0.0.255 (24 match(es))
+    30 permit 10.10.30.0 0.0.0.255
+    40 permit 10.10.99.0 0.0.0.255
+
+R1#

@@ -1,0 +1,92 @@
+! ROUTER 1 (R1) CONFIGURATION
+! Copy and paste this into the R1 CLI (Global Configuration Mode)
+
+hostname R1
+no ip domain-lookup
+ip domain-name smartbranch.local
+crypto key generate rsa modulus 2048
+
+! User for SSH
+username admin privilege 15 secret cisco123
+
+! Enable SSH on VTY lines
+line vty 0 4
+ login local
+ transport input ssh
+ access-class 1 in
+exit
+
+! Access-class ACL to restrict SSH only from Management VLAN 99
+access-list 1 permit 10.10.99.0 0.0.0.255
+
+! DHCP Pools
+ip dhcp excluded-address 10.10.10.1 10.10.10.10
+ip dhcp pool EMPLOYEE_POOL
+ network 10.10.10.0 255.255.255.0
+ default-router 10.10.10.1
+ dns-server 8.8.8.8
+exit
+
+ip dhcp excluded-address 10.10.20.1 10.10.20.10
+ip dhcp pool GUEST_POOL
+ network 10.10.20.0 255.255.255.0
+ default-router 10.10.20.1
+ dns-server 8.8.8.8
+exit
+
+! Main interface to Switches (Trunk)
+interface GigabitEthernet0/0
+ no shutdown
+exit
+
+! Router-on-a-stick Subinterfaces
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.10.10.1 255.255.255.0
+ ip nat inside
+exit
+
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.10.20.1 255.255.255.0
+ ip nat inside
+ ip access-group 100 in
+exit
+
+interface GigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.10.30.1 255.255.255.0
+ ip nat inside
+exit
+
+interface GigabitEthernet0/0.99
+ encapsulation dot1Q 99
+ ip address 10.10.99.1 255.255.255.0
+ ip nat inside
+exit
+
+! Internet Interface
+interface GigabitEthernet0/1
+ ip address dhcp
+ ip nat outside
+ no shutdown
+exit
+
+! Extended ACL 100 applied to Guest interface INBOUND
+! Deny Guest to Server (10.10.30.0/24)
+! Deny Guest to Management (10.10.99.0/24)
+! Permit Guest to anywhere else (Internet)
+access-list 100 deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255
+access-list 100 deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255
+access-list 100 permit ip any any
+
+! NAT Configuration
+access-list 2 permit 10.10.10.0 0.0.0.255
+access-list 2 permit 10.10.20.0 0.0.0.255
+access-list 2 permit 10.10.30.0 0.0.0.255
+access-list 2 permit 10.10.99.0 0.0.0.255
+
+ip nat inside source list 2 interface GigabitEthernet0/1 overload
+
+! Default Route (Assuming G0/1 gets DHCP, standard static route fallback)
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1
